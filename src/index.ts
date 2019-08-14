@@ -1,16 +1,15 @@
-import { XHttpRequestConfig } from './types'
+import { XHttpRequestConfig, XHttpPromise } from './types'
 import xhr from './xhr'
 import { buildUrl } from './helpers/url'
 import { transformRequest } from './helpers/data'
 import { processHeaders } from './helpers/headers'
 
-function XHttp(config: XHttpRequestConfig): void {
+function XHttp(config: XHttpRequestConfig): XHttpPromise {
   processConfig(config)
-  xhr(config)
+  return xhr(config)
 }
 
 function processConfig(config: XHttpRequestConfig): void {
-  console.log(config)
   config.url = transformURL(config)
   config.headers = transformHeaders(config)
   config.data = transformRequestData(config)
