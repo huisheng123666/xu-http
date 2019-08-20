@@ -2,8 +2,16 @@ import { Method, XHttpPromise, XHttpRequestConfig } from '../types'
 import dispatchRequest from './dispatchRequest'
 
 export default class XHttp {
-  request(config: XHttpRequestConfig): XHttpPromise {
-    return dispatchRequest(config)
+  request(url?: any, config?: XHttpRequestConfig): XHttpPromise {
+    if (typeof url === 'string') {
+      if (!config) {
+        config = {}
+      }
+      config.url = url
+    } else {
+      config = url
+    }
+    return dispatchRequest(config as XHttpRequestConfig)
   }
 
   get(url: string, config?: XHttpRequestConfig): XHttpPromise {
@@ -15,11 +23,11 @@ export default class XHttp {
   }
 
   head(url: string, config?: XHttpRequestConfig): XHttpPromise {
-    return this._requestMethodData('delete', url, config)
+    return this._requestMethodData('head', url, config)
   }
 
   options(url: string, config?: XHttpRequestConfig): XHttpPromise {
-    return this._requestMethodData('delete', url, config)
+    return this._requestMethodData('options', url, config)
   }
 
   post(url: string, data?: any, config?: XHttpRequestConfig): XHttpPromise {

@@ -1,5 +1,6 @@
 export type Method = 'get' | 'GET'
 | 'delete' | 'DELETE'
+| 'options' | 'OPTIONS'
 | 'head' | 'HEAD'
 | 'post' | 'POST'
 | 'put' | 'PUT'
@@ -49,4 +50,5 @@ export interface XHttp {
 
 export interface XHttpInstance extends XHttp {
   (config: XHttpRequestConfig): XHttpPromise
+  (url: string, config: XHttpRequestConfig): XHttpResponse
 }

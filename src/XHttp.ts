@@ -17,7 +17,7 @@ function processConfig(config: XHttpRequestConfig): void {
 
 function transformURL(config: XHttpRequestConfig):string {
   const {url, params} = config
-  return buildUrl(url, params)
+  return buildUrl(url!, params)
 }
 
 // data数据转化字符串

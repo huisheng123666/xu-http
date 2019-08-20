@@ -13,7 +13,7 @@ export default function index(config: XHttpRequestConfig): XHttpPromise {
       request.responseType = responseType
     }
 
-    request.open(method.toUpperCase(), url, true)
+    request.open(method.toUpperCase(), url!, true)
 
     Object.keys(headers).map(name => {
       if (data === null && name.toLowerCase() === 'content-type') {

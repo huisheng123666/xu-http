@@ -1,5 +1,15 @@
-import XHttp from './XHttp'
+import { XHttpInstance } from './types'
+import XHttp from './core/XHttp'
+import { extend } from './helpers/utils'
 
-export * from './types'
+function createInstance(): XHttpInstance {
+  const context = new XHttp()
+  // instance默认函数初始化
+  const instance = XHttp.prototype.request.bind(context)
+  extend(instance, context)
+  return instance as XHttpInstance
+}
 
-export default XHttp
+const xhttp = createInstance()
+
+export default xhttp
