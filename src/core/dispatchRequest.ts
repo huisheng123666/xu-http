@@ -1,31 +1,28 @@
-import { XHttpRequestConfig, XHttpPromise } from '../types'
-import xhr from '../xhr'
+import { XHttpRequestConfig, XHttpPromise, XHttpResponse } from '../types'
+import xhr from './xhr'
 import { buildUrl } from '../helpers/url'
-import { transformRequest } from '../helpers/data'
-import { processHeaders } from '../helpers/headers'
+import { flattenHeaders } from '../helpers/headers'
+import transform from './transform'
 
 export default function dispatchRequest(config: XHttpRequestConfig): XHttpPromise {
   processConfig(config)
-  return xhr(config)
+  return xhr(config).then(res => {
+    return transformResponseData(res)
+  })
 }
 
 function processConfig(config: XHttpRequestConfig): void {
   config.url = transformURL(config)
-  config.headers = transformHeaders(config)
-  config.data = transformRequestData(config)
+  config.data = transform(config.data, config.headers, config.transformRequest)
+  config.headers = flattenHeaders(config.headers, config.method!)
 }
 
-function transformURL(config: XHttpRequestConfig):string {
-  const {url, params} = config
+function transformURL(config: XHttpRequestConfig): string {
+  const { url, params } = config
   return buildUrl(url!, params)
 }
 
-// data数据转化字符串
-function transformRequestData(config: XHttpRequestConfig): any {
-  return transformRequest(config.data)
-}
-
-function transformHeaders(config: XHttpRequestConfig): any {
-  const { headers = {}, data } = config
-  return processHeaders(headers, data)
+function transformResponseData(res: XHttpResponse): any {
+  res.data = transform(res.data, res.headers, res.config.transformResponse)
+  return res
 }

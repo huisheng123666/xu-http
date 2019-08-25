@@ -17,6 +17,8 @@ axios.interceptors.response.use(res => {
   res.data += '1'
   return res
 })
+
+// use返回的是
 let interceptor = axios.interceptors.response.use(res => {
   res.data += '2'
   return res
@@ -36,4 +38,16 @@ axios({
   }
 }).then((res) => {
   console.log(res.data)
+})
+
+// catch后第一次then不会执行
+function test(): Promise<any> {
+  return new Promise<any>((resolve, reject) => {
+    reject(new Error('123'))
+  })
+}
+test().catch((err) => err).then(res => {
+  console.log(res)
+}).then(res => {
+  console.log(res)
 })

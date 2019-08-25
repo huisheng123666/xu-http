@@ -3,7 +3,7 @@ import { parseResponseHeaders } from '../helpers/headers'
 import { transformResponse } from '../helpers/data'
 import { createError } from '../helpers/error'
 
-export default function index(config: XHttpRequestConfig): XHttpPromise {
+export default function(config: XHttpRequestConfig): XHttpPromise {
   return new Promise((resolve, reject) => {
     const { url, data = null, method = 'get', headers, responseType, timeout } = config
 
@@ -35,7 +35,7 @@ export default function index(config: XHttpRequestConfig): XHttpPromise {
       const responseHeaders = parseResponseHeaders(request.getAllResponseHeaders())
       const responseData = responseType !== 'text' ? request.response : request.responseText
       const response: XHttpResponse = {
-        data: transformResponse(responseData),
+        data: responseData,
         status: request.status,
         statusText: request.statusText,
         headers: responseHeaders,
@@ -61,7 +61,15 @@ export default function index(config: XHttpRequestConfig): XHttpPromise {
       if (response.status >= 200 && response.status < 300) {
         resolve(response)
       } else {
-        reject(createError(`Request failed with status code ${response.status}`, config, null, request, response))
+        reject(
+          createError(
+            `Request failed with status code ${response.status}`,
+            config,
+            null,
+            request,
+            response
+          )
+        )
       }
     }
   })
